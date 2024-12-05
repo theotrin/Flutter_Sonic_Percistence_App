@@ -18,6 +18,13 @@ class _CharacterScreenState extends State<CharacterScreen> {
         appBar: AppBar(
           title: const Text('Personagens Sonic'),
           leading: const Icon(Icons.add_task),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  setState(() {});
+                },
+                icon: Icon(Icons.refresh))
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.only(top: 8, bottom: 70),
@@ -95,9 +102,13 @@ class _CharacterScreenState extends State<CharacterScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (contextNew) => FormScreen(characterContext: context),
+                builder: (contextNew) => FormScreen(
+                  characterContext: context,
+                ),
               ),
-            );
+            ).then((value) => setState(() {
+                  print('Recarregando tela inicial...');
+                }));
           },
           child: const Icon(Icons.add),
         ));
