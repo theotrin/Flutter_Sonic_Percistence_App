@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sonic_persistence_app/components/character.dart';
+import 'package:sonic_persistence_app/data/character_dao.dart';
 import 'package:sonic_persistence_app/data/character_inherited.dart';
 import 'package:sonic_persistence_app/screens/form_screen.dart';
 
@@ -17,9 +19,75 @@ class _CharacterScreenState extends State<CharacterScreen> {
           title: const Text('Personagens Sonic'),
           leading: const Icon(Icons.add_task),
         ),
-        body: ListView(
+        body: Padding(
           padding: const EdgeInsets.only(top: 8, bottom: 70),
-          children: CharacterInherited.of(context)!.characterList,
+          child: FutureBuilder<List<Character>>(
+            future: CharacterDao().findAll(),
+            builder: (context, snapshot) {
+              List<Character>? items = snapshot.data;
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return Center(
+                    child: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        Text('Carregando...'),
+                      ],
+                    ),
+                  );
+                  break;
+                case ConnectionState.waiting:
+                  return Center(
+                    child: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        Text('Carregando...'),
+                      ],
+                    ),
+                  );
+                  break;
+                case ConnectionState.active:
+                  return Center(
+                    child: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        Text('Carregando...'),
+                      ],
+                    ),
+                  );
+                  break;
+                case ConnectionState.done:
+                  if (snapshot.hasData && items != null) {
+                    if (items.isNotEmpty) {
+                      return ListView.builder(
+                          itemCount: items.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final Character character = items[index];
+                            return character;
+                          });
+                    }
+                    return Center(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            size: 128,
+                          ),
+                          Text(
+                            'Não há nenhum personagem :/',
+                            style: TextStyle(fontSize: 32),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return Text('Erro ao carregar personagens');
+                  break;
+              }
+              return Text('Erro desconhecido');
+            },
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           heroTag: null,
