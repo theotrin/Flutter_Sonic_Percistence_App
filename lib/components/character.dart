@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sonic_persistence_app/data/character_dao.dart';
 
 class Character extends StatefulWidget {
   final String name;
@@ -110,17 +111,19 @@ class _CharacterState extends State<Character> {
                     children: [
                       Row(
                         children: [
-                          FloatingActionButton(
-                            heroTag: null,
+                          ElevatedButton(
                             onPressed: decrementSpeed,
-                            tooltip: 'Diminuir Velocidade',
+                            onLongPress: () {
+                              CharacterDao().delete(widget.name);
+                            },
                             child: const Icon(Icons.remove),
                           ),
                           const SizedBox(width: 8),
-                          FloatingActionButton(
-                            heroTag: null,
+                          ElevatedButton(
                             onPressed: incrementSpeed,
-                            tooltip: 'Aumentar Velocidade',
+                            onLongPress: () {
+                              CharacterDao().delete(widget.name);
+                            },
                             child: const Icon(Icons.add),
                           ),
                         ],
