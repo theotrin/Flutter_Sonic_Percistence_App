@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sonic_persistence_app/components/character.dart';
+import 'package:sonic_persistence_app/data/character_dao.dart';
 import 'package:sonic_persistence_app/data/character_inherited.dart';
 
 class FormScreen extends StatefulWidget {
@@ -133,11 +135,11 @@ class _FormScreenState extends State<FormScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        CharacterInherited.of(widget.characterContext)!
-                            .addCharacter(
-                                characterNameController.text,
-                                characterTypeController.text,
-                                characterUrlController.text);
+                        CharacterDao().save(Character(
+                          characterNameController.text,
+                          characterUrlController.text,
+                          characterTypeController.text,
+                        ));
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Salvando novo personagem...'),
